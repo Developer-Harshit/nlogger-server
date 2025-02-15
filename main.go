@@ -53,31 +53,43 @@ type test_struct struct {
 	Email string
 	Phone string
 }
-
-func LogTime(title string,t long) {
+var Reset = "\033[0m"
+var Red = "\033[31m"
+var Green = "\033[32m"
+var Yellow = "\033[33m"
+var Blue = "\033[34m"
+var Magenta = "\033[35m"
+var Cyan = "\033[36m"
+var Gray = "\033[37m"
+var White = "\033[97m"
+func LogColor(field string , value any) {
+	fmt.Printf("\033[35m>>>\033[0m    %v%v: %v%v%v\n",Cyan,field,Yellow,value,Reset);
+}
+func LogTime(field string,t long) {
 	tt,err := t.Int64();
 	if err != nil {
 		log.Println("ERROR WHILE GETTING TIME",err)
 	}
 	ttt := time.Unix(0, 1000000* int64(tt))
-	fmt.Println(title,ttt)
+	LogColor(field,ttt)
 }
+
 func (n Notification) Log() {
-	fmt.Println("--------------Printing Notification-----------------")
-	fmt.Println("PackageName: ", n.PackageName);
+	fmt.Println(Red,"--------------Printing Notification-----------------",Reset)
+	LogColor("PackageName: ", n.PackageName);
 	LogTime("PostTime: ",n.PostTime);
 	LogTime("SystemTime", n.SystemTime)
-	fmt.Println("IsOngoing: ", n.IsOngoing);
-	fmt.Println("TickerText: ", n.TickerText);
-	fmt.Println("Title: ", n.Title);
-	fmt.Println("TitleBig: ", n.TitleBig);
-	fmt.Println("Text: ", n.Text);
-	fmt.Println("TextBig: ", n.TextBig);
-	fmt.Println("TextInfo: ", n.TextInfo);
-	fmt.Println("TextSub: ", n.TextSub);
-	fmt.Println("TextLines: ", n.TextLines);
-	fmt.Println("TextSummary: ", n.TextSummary);
-	fmt.Println("----------------------------------------------------")
+	LogColor("IsOngoing: ", n.IsOngoing);
+	LogColor("TickerText: ", n.TickerText);
+	LogColor("Title: ", n.Title);
+	LogColor("TitleBig: ", n.TitleBig);
+	LogColor("Text: ", n.Text);
+	LogColor("TextBig: ", n.TextBig);
+	LogColor("TextInfo: ", n.TextInfo);
+	LogColor("TextSub: ", n.TextSub);
+	LogColor("TextLines: ", n.TextLines);
+	LogColor("TextSummary: ", n.TextSummary);
+	fmt.Println(Red,"----------------------------------------------------",Reset)
 }
 
 func serveSend(rw http.ResponseWriter, req *http.Request) {
