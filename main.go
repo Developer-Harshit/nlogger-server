@@ -65,7 +65,7 @@ var White = "\033[97m"
 func LogColor(field string , value any) string {
 	return fmt.Sprintf("\033[35m>>>\033[0m    %v%v: %v%v%v\n",Cyan,field,Yellow,value,Reset);
 }
-func LogTime(field string,t long) {
+func LogTime(field string,t long) string {
 	tt,err := t.Int64();
 	if err != nil {
 		log.Println("ERROR WHILE GETTING TIME",err)
