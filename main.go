@@ -71,7 +71,10 @@ func LogTime(field string,t long) {
 		log.Println("ERROR WHILE GETTING TIME",err)
 	}
 	ttt := time.Unix(0, 1000000* int64(tt))
-	LogColor(field,ttt)
+	loc, err := time.LoadLocation("Asia/Kolkata")
+	if err == nil {
+		LogColor(field,ttt.In(loc))
+	}
 }
 
 func (n Notification) Log() {
