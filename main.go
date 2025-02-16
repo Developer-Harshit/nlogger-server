@@ -17,7 +17,8 @@ var page string
 func main() {
 	http.HandleFunc("/", serveHello)
 	http.HandleFunc("/test", test)
-		http.HandleFunc("/send", serveSend)
+	http.HandleFunc("/send", serveSend)
+	http.HandleFunc("/error", serveError)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -62,10 +63,10 @@ var Magenta = "\033[35m"
 var Cyan = "\033[36m"
 var Gray = "\033[37m"
 var White = "\033[97m"
-func LogColor(field string , value any) string {
-	return fmt.Sprintf("\033[35m>>>\033[0m    %v%v: %v%v%v\n",Cyan,field,Yellow,value,Reset);
+func LogColor(field string , value any) {
+	fmt.Printf("\033[35m>>>\033[0m    %v%v: %v%v%v\n",Cyan,field,Yellow,value,Reset);
 }
-func LogTime(field string,t long) string {
+func LogTime(field string,t long) {
 	tt,err := t.Int64();
 	if err != nil {
 		log.Println("ERROR WHILE GETTING TIME",err)
@@ -73,29 +74,26 @@ func LogTime(field string,t long) string {
 	ttt := time.Unix(0, 1000000* int64(tt))
 	loc, err := time.LoadLocation("Asia/Kolkata")
 	if err == nil {
-		return LogColor(field,ttt.In(loc))
+		LogColor(field,ttt.In(loc))
 	}
-        return ""
-
 }
 
 func (n Notification) Log() {
-	str := fmt.Sprintln("\n",Red,"--------------Printing Notification-----------------",Reset)
-	str += LogColor("PackageName: ", n.PackageName);
-	str += LogTime("PostTime: ",n.PostTime);
-	str += LogTime("SystemTime", n.SystemTime)
-	str += LogColor("IsOngoing: ", n.IsOngoing);
-	str += LogColor("TickerText: ", n.TickerText);
-	str += LogColor("Title: ", n.Title);
-	str += LogColor("TitleBig: ", n.TitleBig);
-	str += LogColor("Text: ", n.Text);
-	str += LogColor("TextBig: ", n.TextBig);
-	str += LogColor("TextInfo: ", n.TextInfo);
-	str += LogColor("TextSub: ", n.TextSub);
-	str += LogColor("TextLines: ", n.TextLines);
-	str += LogColor("TextSummary: ", n.TextSummary);
-	str += fmt.Sprintln(Red,"----------------------------------------------------",Reset)
-	fmt.Println(str)
+	fmt.Println(Red,"--------------Printing Notification-----------------",Reset)
+	LogColor("PackageName: ", n.PackageName);
+	LogTime("PostTime: ",n.PostTime);
+	LogTime("SystemTime", n.SystemTime)
+	LogColor("IsOngoing: ", n.IsOngoing);
+	LogColor("TickerText: ", n.TickerText);
+	LogColor("Title: ", n.Title);
+	LogColor("TitleBig: ", n.TitleBig);
+	LogColor("Text: ", n.Text);
+	LogColor("TextBig: ", n.TextBig);
+	LogColor("TextInfo: ", n.TextInfo);
+	LogColor("TextSub: ", n.TextSub);
+	LogColor("TextLines: ", n.TextLines);
+	LogColor("TextSummary: ", n.TextSummary);
+	fmt.Println(Red,"----------------------------------------------------",Reset)
 }
 
 func serveSend(rw http.ResponseWriter, req *http.Request) {
@@ -116,7 +114,20 @@ func test(rw http.ResponseWriter, req *http.Request) {
 	}
 	log.Printf("%#v", t)
 }
-
+type ErrorMsg struct {
+	Message string
+}
+func serveError(rw http.ResponseWriter, req *http.Request) {
+	var n Notification
+	err := json.NewDecoder(req.Body).Decode(&n)
+	if err != nil {
+		log.Println("ERROR PARSING JSON",err)
+		fmt.Fprint(rw, "hi from sender")
+		return;
+	}
+	fmt.Println(Red,"ERROR MESSAGE_> ",n,Reset);
+	fmt.Fprint(rw, "hi from sender")
+}
 func serveHello(rw http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(rw, page)
 }
