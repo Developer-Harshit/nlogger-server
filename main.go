@@ -42,6 +42,7 @@ type Notification struct {
 	TickerText  string
 	Title       string
 	TitleBig    string
+	Messages 	string
 	Text        string
 	TextBig     string
 	TextInfo    string
@@ -88,6 +89,7 @@ func (n Notification) Log() {
 	LogColor("Title: ", n.Title);
 	LogColor("TitleBig: ", n.TitleBig);
 	LogColor("Text: ", n.Text);
+	LogColor("Messages: ", n.Messages);
 	LogColor("TextBig: ", n.TextBig);
 	LogColor("TextInfo: ", n.TextInfo);
 	LogColor("TextSub: ", n.TextSub);
