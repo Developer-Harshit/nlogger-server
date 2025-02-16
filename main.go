@@ -120,7 +120,7 @@ type ErrorMsg struct {
 	Message string
 }
 func serveError(rw http.ResponseWriter, req *http.Request) {
-	var n Notification
+	var n ErrorMsg
 	err := json.NewDecoder(req.Body).Decode(&n)
 	if err != nil {
 		log.Println("ERROR PARSING JSON",err)
