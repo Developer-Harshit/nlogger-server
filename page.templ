@@ -1,0 +1,32 @@
+package main
+
+templ notificationComponent(nlist QueryResponse) {
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<link rel="stylesheet" href="/static/css/base.css">
+		</head>
+		<body>
+			<ul>
+				for _,n := range nlist.Records {
+					<li>
+						<p>{ n.Data.PackageName }</p>
+						<p>{ n.Data.Text }</p>
+						<ul>
+							for _,msg := range stringLineSlice(n.Data.Messages) {
+								<li>{ msg }</li>
+							}
+						</ul>
+						<ul>
+							for _,msg := range stringLineSlice(n.Data.TextLines) {
+								<li>{ msg }</li>
+							}
+						</ul>
+						<p>{ n.Data.Title }</p>
+						<p>{ n.Data.TickerText }</p>
+					</li>
+				}
+			</ul>
+		</body>
+	</html>
+}
